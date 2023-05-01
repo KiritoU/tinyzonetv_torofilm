@@ -498,10 +498,10 @@ class Torofilm:
                         post_id,
                         f"trglinks_{len_episode_links}",
                         helper.generate_trglinks(
-                            server=helper.get_server_name_from(link),
+                            server=CONFIG.LINK_LANGUAGE,
                             link=link,
                             lang=quality,
-                            quality=helper.get_server_name_from(link),
+                            quality=CONFIG.LINK_LANGUAGE,
                         ),
                     )
                 )
@@ -624,10 +624,10 @@ class Torofilm:
                             episode_term_id,
                             f"trglinks_{len_episode_links}",
                             helper.generate_trglinks(
-                                server=helper.get_server_name_from(link),
+                                server=CONFIG.LINK_LANGUAGE,
                                 link=link,
                                 lang=quality,
-                                quality=helper.get_server_name_from(link),
+                                quality=CONFIG.LINK_LANGUAGE,
                             ),
                         )
                     )
