@@ -15,10 +15,10 @@ if __name__ == "__main__":
             crawled_page = crawler.crawl_page(
                 f"{CONFIG.TINYZONETV_TVSHOWS_PAGE}?page={i}"
             )
+            i += 1
             if not crawled_page and i >= CONFIG.TINYZONETV_TVSHOWS_LAST_PAGE:
-                i = 2
-            else:
-                i += 1
+                i = 1
+
         except Exception as e:
             pass
         time.sleep(CONFIG.WAIT_BETWEEN_ALL)
