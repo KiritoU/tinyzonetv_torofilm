@@ -177,6 +177,7 @@ class TorofilmHelper:
     def generate_film_data(
         self,
         title,
+        slug,
         description,
         post_type,
         trailer_id,
@@ -186,6 +187,7 @@ class TorofilmHelper:
         post_data = {
             "description": description,
             "title": title,
+            "slug": slug,
             "post_type": post_type,
             # "id": "202302",
             "youtube_id": f"{trailer_id}",
@@ -243,7 +245,7 @@ class TorofilmHelper:
             "open",
             "open",
             "",
-            slugify(post_data["title"]),
+            post_data["slug"],
             "",
             "",
             timeupdate.strftime("%Y/%m/%d %H:%M:%S"),
@@ -526,7 +528,7 @@ class Torofilm:
         self.film["cover_id"] = "0"
 
     def insert_root_film(self) -> list:
-        condition_post_name = slugify(self.film["post_title"])
+        condition_post_name = self.film["slug"]
         condition = f"""post_name = '{condition_post_name}' AND post_type='{self.film["post_type"]}'"""
         be_post = database.select_all_from(
             table=f"{CONFIG.TABLE_PREFIX}posts", condition=condition
@@ -535,6 +537,7 @@ class Torofilm:
             logging.info(f'Inserting root film: {self.film["post_title"]}')
             post_data = helper.generate_film_data(
                 self.film["post_title"],
+                self.film["slug"],
                 self.film["description"],
                 self.film["post_type"],
                 self.film["trailer_id"],
@@ -589,7 +592,9 @@ class Torofilm:
                 episode_title if episode_title else episode_title_self_created
             )
 
-            episode_term_slug = slugify(episode_title_self_created)
+            episode_term_slug = slugify(
+                self.film["slug"] + f" {self.film['season_number']}x{episode_number}"
+            )
             episode_term_id, is_new_episode = helper.insert_terms(
                 post_id=post_id,
                 terms=episode_term_name,
@@ -653,7 +658,7 @@ class Torofilm:
         season_term_name = (
             self.film["post_title"] + " - Season " + self.film["season_number"]
         )
-        season_term_slug = self.film["post_title"] + " - " + self.film["season_number"]
+        season_term_slug = self.film["slug"] + " - " + self.film["season_number"]
         season_term_id, isNewSeason = helper.insert_terms(
             post_id=post_id,
             terms=season_term_name,

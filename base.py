@@ -56,6 +56,7 @@ class Crawler:
     def crawl_film(
         self,
         title: str,
+        slug: str,
         fd_infor: list,
         quality: str,
         cover_src: str,
@@ -92,6 +93,7 @@ class Crawler:
 
         film_data = {
             "title": title,
+            "slug": slug,
             "description": description,
             "post_type": post_type,
             "trailer_id": trailer_id,
@@ -137,8 +139,11 @@ class Crawler:
             if "http" not in href:
                 href = CONFIG.TINYZONETV_HOMEPAGE + href
 
+            slug = href.split("/")[-1]
+
             film_data, episodes_data = self.crawl_film(
                 title=title,
+                slug=slug,
                 fd_infor=fd_infor,
                 quality=quality,
                 cover_src=cover_src,
